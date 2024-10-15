@@ -1,0 +1,78 @@
+---
+title: "Posit"
+format: html
+editor: visual
+---
+
+## Packages
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(lubridate)
+
+```
+
+## Data Import
+
+```{r}
+claims <- read_csv("claims.csv")
+claims
+```
+
+## Data cleaning
+
+```{r}
+claims_clean <- claims %>%
+ filter(!is.na(DIAGNOSIS2)) %>%
+ mutate(Month = format(SERVICEDATE, "%M")) %>%
+ group_by(Month) %>%
+  summarise(UniquePatients = n_distinct(PATIENTID))
+
+```
+
+## Data Visualization
+
+```{r}
+
+
+
+ggplot(claims_clean, aes(x = Month, y = UniquePatients, fill = UniquePatients)) +
+  geom_bar(stat = "identity") +
+  scale_fill_gradient(low = "yellow", high = "red") +
+  labs(
+    title = "Unique Number of Patients by Month",
+    x = "Month of Service Date",
+    y = "Unique Patients"
+  ) +
+  theme_minimal()
+```
+
+## Data Analysis
+
+```{r}
+
+```
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
